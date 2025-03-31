@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+body, html {
+  /* margin: 0; */
+  display: flex;
+  /* place-items: center; */
+  /* min-width: 320px; */
+  min-height: 100vh;
+  flex: 1 1 auto;
+  flex-direction: column;
+  /* color-scheme: light dark; */
+}
+
+#root {
+  /* Position */
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
+  /* padding: 2rem; */
+  text-align: center;
+  /* Font */
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+button, select {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: none;
+  pointer-events: none;
+}
