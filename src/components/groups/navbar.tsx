@@ -13,7 +13,8 @@ export function NavBar() {
       <ColorScheme />
       <Modal
         title='Settings'
-        icon={<Cog6ToothIcon className='size-10'/>}>
+        icon={<Cog6ToothIcon className='size-10'/>}
+        hasCallback>
         <AppSettings />
       </Modal>
     </div>
