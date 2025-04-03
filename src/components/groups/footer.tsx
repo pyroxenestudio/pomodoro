@@ -3,7 +3,7 @@ import Modal from "../modal";
 
 export function Footer() {
   return (
-    <footer className='h-12 flex justify-start items-center'>
+    <footer className='h-12 flex justify-center items-center'>
       <Modal title='About' icon={<span>About</span>} buttonStyles='p-2'>
         <section>
           This is an open source pomodoro
@@ -19,7 +19,7 @@ export function Footer() {
         <section>
         </section>
       </Modal>
-      <Button variant='transparent' className='!font-normal'><a href='#'>Pyroxene</a></Button>
+      {/* <Button variant='transparent' className='!font-normal'><a href='#'>Pyroxene</a></Button> */}
     </footer>
   )
 }

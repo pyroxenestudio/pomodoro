@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { DispatchContext, SettingsContext } from "../store/context";
 import { IStore } from "../store/reducer";
 import LabelInput from "./groups/label-input";
@@ -58,7 +58,7 @@ const AppSettings = function (props: IProps) {
       <LabelInput name='longbreak' title={'Long Break'} type='number' defaultValue={settings?.longBreak}/>
       <LabelInput name='interval' title={'How many breaks before Long Break'} type='number' defaultValue={settings?.interval}/>
       <LabelInput name='volume' title={'Volume'} type='range' defaultValue={settings?.volume} max='100' min='0'/>
-      <Button type='submit'>save</Button>
+      <Button type='submit' className='w-30 mt-3'>Save</Button>
     </form>
   );
 }

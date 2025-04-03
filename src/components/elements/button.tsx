@@ -1,18 +1,19 @@
 import clsx from "clsx";
+// import { IStyleTheme } from "../../theme";
 
 const buttonStyle = {
   main: 'p-2 rounded-sm font-semibold disabled:bg-slate-300 dark:disabled:bg-slate-500',
   success: {
-    light: 'bg-green-200 active:bg-green-300',
-    dark: 'dark:bg-green-700 dark:active:bg-green-800'
+    light: 'bg-green-200 active:bg-green-300 text-slate-800',
+    dark: 'dark:bg-green-700 dark:active:bg-green-800 dark:text-slate-100'
   },
   danger: {
-    light: 'bg-rose-200 active:bg-rose-300',
-    dark: 'dark:bg-rose-700 dark:active:bg-rose-800'
+    light: 'bg-rose-200 active:bg-rose-300 text-slate-800',
+    dark: 'dark:bg-rose-700 dark:active:bg-rose-800 dark:text-slate-100'
   },
   warning: {
-    light: 'bg-amber-200 active:bg-amber-300',
-    dark: 'dark:bg-amber-700 dark:active:bg-amber-800'
+    light: 'bg-amber-200 active:bg-amber-300 text-slate-800',
+    dark: 'dark:bg-amber-700 dark:active:bg-amber-800 dark:text-slate-100'
   },
   transparent: {
     light: '',

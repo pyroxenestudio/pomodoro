@@ -12,6 +12,7 @@ export function NavBar() {
     <div id='navbar' className='min-h-12 pt-2 flex justify-end'>
       <ColorScheme />
       <Modal
+        buttonStyles="p-2"
         title='Settings'
         icon={<Cog6ToothIcon className='size-10'/>}
         hasCallback>

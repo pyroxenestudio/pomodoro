@@ -44,8 +44,8 @@ export function ColorScheme() {
 
   return (
     <>
-      {colorScheme === COLORSCHEME.dark ? <button onClick={() => changeColorScheme(COLORSCHEME.light)}><MoonIcon className='size-10'/></button> : null}
-      {colorScheme === COLORSCHEME.light ? <button onClick={() => changeColorScheme(COLORSCHEME.dark)}><SunIcon className='size-10'/></button> : null}
+      {colorScheme === COLORSCHEME.dark ? <button className='p-2' onClick={() => changeColorScheme(COLORSCHEME.light)}><MoonIcon className='size-10'/></button> : null}
+      {colorScheme === COLORSCHEME.light ? <button className='p-2' onClick={() => changeColorScheme(COLORSCHEME.dark)}><SunIcon className='size-10'/></button> : null}
       {/* {colorScheme === COLORSCHEME.auto ? (
         <button onClick={changeColorScheme} className='flex relative size-12 justify-center items-center'>
           <SunIcon className='size-6 absolute right-1 top-1'/>

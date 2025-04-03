@@ -1,9 +1,11 @@
-import { ChangeEvent, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useMemo, useRef } from "react";
 import useCountDown from "../hooks/useCountDown";
 import { DispatchContext, SettingsContext } from "../store/context";
 import { MODE } from "../store/reducer";
 import Button from "./elements/button";
 import rocket from '../assets/audio/rocket.mp3';
+import { ModeButtons } from "./groups/mode-buttons";
+import { PlayIcon, PauseIcon } from "@heroicons/react/24/solid";
 
 interface IProps {}
 
@@ -46,13 +48,13 @@ const CountDown = function(props: IProps) {
   const timer = useCountDown(minuteByMode, changeMode);
 
   // METHODS
-  function changeMode (manualChange?: React.ChangeEvent<HTMLSelectElement>) {
+  function changeMode (manualChange?: MODE) {
     // Change mode
     if (!timer.isRunning) {
-      if (manualChange) {
+      if (manualChange != undefined) {
         dispatch({
           type: 'mode',
-          payload: Number(manualChange.currentTarget.value)
+          payload: Number(manualChange)
         });
         interval.current = 0;
       } else {
@@ -88,25 +90,25 @@ const CountDown = function(props: IProps) {
   // RENDER VARIABLES
   const min = timer.isRunning ? timer.time?.minutes.toString().padStart(2, '0') : minuteByMode.toString().padStart(2, '0');
   const sec = timer.isRunning ? timer.time?.seconds.toString().padStart(2, '0') : '0'.padStart(2, '0');
-
+  const startButton = !timer.isRunning || timer.isPause ? <button className='size-32' onClick={!timer.isPause ? timer.start : timer.pause} disabled={timer.isRunning && !timer.isPause}><PlayIcon className='size-32'/></button> : null;
+  const pauseButton = timer.isRunning && !timer.isPause ? <button className='size-32' onClick={timer.pause}><PauseIcon/></button> : null;
+  const stopButton = timer.isRunning ? <Button className='w-30 absolute top-[75px] left-[50%] -translate-x-1/2' variant='danger' onClick={timer.stop}>STOP</Button> : null
+  
   return (
     <>
       {/* Percentage Bar */}
-      {timer.isRunning ? <span className='fixed top-0 bg-slate-400 h-2' style={{width: `${timer.time?.percentage}%`}}/> : null}
+      {timer.isRunning ? <span className='fixed top-0 bg-slate-600 dark:bg-slate-300 h-2' style={{width: `${timer.time?.percentage}%`}}/> : null}
+      {/* Mode buttons */}
+      <ModeButtons isRunning={timer.isRunning} active={settings.mode} onChange={changeMode}/>
       {/* Timer */}
       <div id='timer' className='text-8xl font-mono'>
         <span>{min}</span>:<span>{sec}</span>
+        <div>
+          {startButton}
+          {pauseButton}
+        </div>
       </div>
-      {/* Buttons to control Timer */}
-      <Button onClick={timer.start} disabled={timer.isRunning}>START</Button>
-      <Button onClick={timer.stop} variant='danger' disabled={!timer.isRunning}>STOP</Button>
-      <Button onClick={timer.pause} variant='warning' disabled={!timer.isRunning}>{!timer.isPause ? 'PAUSE' : 'UNPAUSE'}</Button>
-      {/* Select Mode */}
-      <select name='selectMode' onChange={changeMode} value={settings.mode} disabled={timer.isRunning} className='p-2'>
-        <option value={MODE.POMODORO}>POMODORO</option>
-        <option value={MODE.BREAK}>BREAK</option>
-        <option value={MODE.LONGBREAK}>LONG BREAK</option>
-      </select>
+      {stopButton}
     </>
   );
 }
