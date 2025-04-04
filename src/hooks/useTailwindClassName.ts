@@ -1,6 +1,6 @@
-import { IStyleTheme } from "../theme";
+// import { IStyleTheme } from "../theme";
 
-export default function useTailwindClassName({background, margin, padding, zIndex}: IStyleTheme) {
+export default function useTailwindClassName() {
   // let className = '';
 
 

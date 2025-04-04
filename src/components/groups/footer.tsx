@@ -1,4 +1,3 @@
-import Button from "../elements/button";
 import Modal from "../modal";
 
 export function Footer() {

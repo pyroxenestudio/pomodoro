@@ -1,4 +1,4 @@
-import { ColorScheme, COLORSCHEME } from "../components/elements/color-scheme";
+import { COLORSCHEME } from "../components/elements/color-scheme";
 
 export enum MODE {
   'POMODORO',

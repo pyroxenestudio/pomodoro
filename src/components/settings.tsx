@@ -28,13 +28,13 @@ const AppSettings = function (props: IProps) {
   }, []);
 
   // METHODS
-  function save(formData: any) {
+  function save(formData: FormData) {
     const newSettingsData: IStore = {
-      pomodoro: formData.get('pomodoro'),
-      break: formData.get('break'),
-      longBreak: formData.get('longbreak'),
-      interval: formData.get('interval'),
-      volume: formData.get('volume')
+      pomodoro: parseInt(formData.get('pomodoro') as string),
+      break: parseInt(formData.get('break') as string),
+      longBreak: parseInt(formData.get('longbreak') as string),
+      interval: parseInt(formData.get('interval') as string),
+      volume: parseInt(formData.get('volume') as string)
     }
     const stringSettings = localStorage.getItem('settings');
     const oldSettings = stringSettings ? JSON.parse(stringSettings) : {};

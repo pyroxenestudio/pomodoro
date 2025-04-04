@@ -10,7 +10,7 @@ interface LabelInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   title: string;
 }
 
-export default function LabelInput({vertical = true, title, type, ...rest}: LabelInputProps) {
+export default function LabelInput({title, type, ...rest}: LabelInputProps) {
 
   const inputStyle = clsx(
     labelInputStyle.input,
