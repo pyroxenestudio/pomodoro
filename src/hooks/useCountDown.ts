@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 const DEV = import.meta.env.DEV
 
+// TODO It is using many useState for get the status, try to reduce it and change some of them to useRef
 export default function useCountDown(maxMinutes: number, callback?: () => void) {
   // STATES
   // check if is running or not
@@ -15,13 +16,13 @@ export default function useCountDown(maxMinutes: number, callback?: () => void) 
 
   // REF
   // timeout when the tab is in the background
-  const hiddenTimer = useRef<any>(null);
+  const hiddenTimer = useRef<ReturnType<typeof setTimeout> | number>(undefined);
   // time in milliseconds when the clock started
   const startTime = useRef<number>(0);
   // default timeout when the clock is running
-  const timeout = useRef<any>(null);
+  const timeout = useRef<ReturnType<typeof setTimeout>>(undefined);
   // last time by performance.now() before the tab is in the background
-  const lastTimeVisible = useRef<any>(null);
+  const lastTimeVisible = useRef<number>(null);
   // Time passed before the clock is paused
   const lastElapsedTime = useRef<number>(null);
 
@@ -32,7 +33,7 @@ export default function useCountDown(maxMinutes: number, callback?: () => void) 
       // Fix interval to be always 1 seconds (1000)
       const nextInterval = 1000 - (elapsedTime % 1000);
       const minutes = Math.floor(maxMinutes - (elapsedTime / 60000));
-      let seconds = 59 - Math.floor((elapsedTime % 60000) / 1000);
+      const seconds = 59 - Math.floor((elapsedTime % 60000) / 1000);
       const percentage = Math.floor((elapsedTime * 100) / (maxMinutes * 60000));
       if (minutes > 0 || seconds > 0) {
         timeout.current = setTimeout(updateClock, nextInterval);
@@ -65,17 +66,16 @@ export default function useCountDown(maxMinutes: number, callback?: () => void) 
       clearTimeout(hiddenTimer.current);
       // ONLY FOR DEVELOP
       if (DEV) {
-        clearTimeout(hiddenTimer.current - 1);
+        clearTimeout(hiddenTimer.current ? hiddenTimer.current as number - 1 : hiddenTimer.current);
       }
       // Check if the clock is finished
       const elapsedTime = performance.now() - startTime.current;
       const minutes = maxMinutes - Math.floor(elapsedTime / 60000);
-      let seconds = 59 - Math.floor((elapsedTime % 60000) / 1000);
+      const seconds = 59 - Math.floor((elapsedTime % 60000) / 1000);
       if (minutes > 0 || seconds > 0) {
         updateClock();
       }
     }
-    // TODO Check if I can remove the isRunning or isPause, the problem is the maxMiunte, becuase it doesn't get update after getting the information from localStore
   }, [isPause, isRunning]);
 
   // Remove and add event listener visibilitychange for backgroundClock function
@@ -113,6 +113,7 @@ export default function useCountDown(maxMinutes: number, callback?: () => void) 
     }
   }
 
+  // TODO use only one stopInterval
   const stopByInterval = function() {
     clearTimeout(timeout.current);
     startTime.current = 0;
