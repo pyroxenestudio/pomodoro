@@ -13,6 +13,8 @@ function App() {
   const [settings, dispatch] = useImmerReducer(settingsReducer, defaultStore);
   const [loaded, setLoaded] = useState<boolean>(false);
 
+  
+
   useEffect(() => {
     const localStoreConfig = localStorage.getItem('settings');
     if (localStoreConfig) {
@@ -22,6 +24,12 @@ function App() {
       });
     }
     setLoaded(true);
+
+
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      console.log(evt);
+    };    
   }, []);
 
   return (

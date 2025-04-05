@@ -3,7 +3,8 @@ import useCountDown from "../hooks/useCountDown";
 import { DispatchContext, SettingsContext } from "../store/context";
 import { MODE } from "../store/reducer";
 import Button from "./elements/button";
-import rocket from '../assets/audio/rocket.mp3';
+// import rocket from '../assets/audio/rocket.mp3';
+import Sounds from '../sounds';
 import { ModeButtons } from "./groups/mode-buttons";
 import { PlayIcon, PauseIcon } from "@heroicons/react/24/solid";
 
@@ -13,7 +14,7 @@ const CountDown = function() {
   const dispatch = useContext(DispatchContext)!;
 
   const [audio,] = useState<HTMLAudioElement>(() => {
-    return new Audio(rocket);
+    return new Audio(Sounds.rocket);
   });
 
   // VARIABLES
