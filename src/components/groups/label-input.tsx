@@ -2,7 +2,7 @@ import clsx from "clsx";
 
 const labelInputStyle = {
   label: '',
-  input: 'border rounded-sm text-slate-900 bg-slate-200 dark:bg-slate-800 dark:text-slate-100 font-normal'
+  input: 'focus:outline-none border rounded-sm border-slate-300 dark:border-slate-700 bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-100 font-normal focus:border-slate-700 dark:focus:border-slate-300'
 }
 
 interface LabelInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
