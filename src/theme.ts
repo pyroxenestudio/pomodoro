@@ -7,20 +7,20 @@ export const styleTheme = {
     level_4: 'bg-slate-500'
   },
   padding: {
-    noPadding: '',
+    no: 'p-0',
     small: 'p-1',
     normal: 'p-2',
     big: 'p-3'
   },
   margin: {
-    noMargin: '',
-    small: 'p-1',
-    normal: 'p-2',
-    big: 'p-3'
+    no: 'm-0',
+    small: 'm-1',
+    normal: 'm-2',
+    big: 'm-3'
   },
   border: {
     radius: {
-      noRadius: '',
+      no: 'rounded-none',
       small: 'rounded-sm',
       normal: 'rounded-md',
       big: 'rounded-lg'
@@ -30,6 +30,10 @@ export const styleTheme = {
       normal: 'border-2',
       big: 'border-3'
     },
+    color: {
+      light: 'border-slate-300 focus:border-slate-700',
+      dark: 'dark:border-slate-700 dark:focus:border-slate-300'
+    }
   },
   zIndex: {
     level_1: 'z-1',
@@ -37,12 +41,32 @@ export const styleTheme = {
     level_3: 'z-3',
     level_4: 'z-4',
     level_5: 'z-5'
+  },
+  font: {
+    weight: {
+      verySmall: 'font-thin',
+      small: 'font-extralight',
+      normal: 'font-normal',
+      big: 'font-semibold'
+    },
+    color: {
+      light: 'text-slate-700 ',
+      dark: 'dark:text-slate-300'
+    }
   }
 }
 export interface IStyleTheme {
-  background?: typeof styleTheme.background;
-  padding?: typeof styleTheme.padding;
-  margin?: typeof styleTheme.margin;
-  border?: typeof styleTheme.border;
-  zIndex?: typeof styleTheme.zIndex;
+  background?: keyof typeof styleTheme.background;
+  padding?: keyof typeof styleTheme.padding;
+  margin?: keyof typeof styleTheme.margin;
+  border?: {
+    radius?: keyof typeof styleTheme.border.radius;
+    size?: keyof typeof styleTheme.border.radius;
+    color?: keyof typeof styleTheme.border.color;
+  };
+  zIndex?: keyof typeof styleTheme.zIndex;
+  font?: {
+    weight: typeof styleTheme.font.weight;
+    color: typeof styleTheme.font.color;
+  }
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { MoonIcon } from '@heroicons/react/24/outline'
 import { SunIcon } from '@heroicons/react/24/solid'
+import { styleTheme } from "../../theme";
 
 export enum COLORSCHEME {
   'dark',
@@ -44,8 +45,8 @@ export function ColorScheme() {
 
   return (
     <>
-      {colorScheme === COLORSCHEME.dark ? <button className='p-2' onClick={() => changeColorScheme(COLORSCHEME.light)}><MoonIcon className='size-10'/></button> : null}
-      {colorScheme === COLORSCHEME.light ? <button className='p-2' onClick={() => changeColorScheme(COLORSCHEME.dark)}><SunIcon className='size-10'/></button> : null}
+      {colorScheme === COLORSCHEME.dark ? <button className={styleTheme.padding.normal} onClick={() => changeColorScheme(COLORSCHEME.light)}><MoonIcon className='size-10'/></button> : null}
+      {colorScheme === COLORSCHEME.light ? <button className={styleTheme.padding.normal} onClick={() => changeColorScheme(COLORSCHEME.dark)}><SunIcon className='size-10'/></button> : null}
       {/* {colorScheme === COLORSCHEME.auto ? (
         <button onClick={changeColorScheme} className='flex relative size-12 justify-center items-center'>
           <SunIcon className='size-6 absolute right-1 top-1'/>

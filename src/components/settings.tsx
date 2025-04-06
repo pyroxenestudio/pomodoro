@@ -58,7 +58,7 @@ const AppSettings = function (props: IProps) {
       <LabelInput name='longbreak' title={'Long Break'} type='number' defaultValue={settings?.longBreak}/>
       <LabelInput name='interval' title={'How many breaks before Long Break'} type='number' defaultValue={settings?.interval}/>
       <LabelInput name='volume' title={'Volume'} type='range' defaultValue={settings?.volume} max='100' min='0'/>
-      <Button type='submit' className='w-30 mt-3'>Save</Button>
+      <Button type='submit' className='w-30 mt-3' variant="success">Save</Button>
     </form>
   );
 }

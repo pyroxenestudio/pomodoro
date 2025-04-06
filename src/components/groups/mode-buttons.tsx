@@ -1,7 +1,6 @@
-// interface ModeButtonsProps {
-
 import clsx from "clsx"
 import { MODE } from "../../store/reducer";
+import { styleTheme } from "../../theme";
 
 interface ModeButtonsProps {
   isRunning: boolean;
@@ -9,17 +8,15 @@ interface ModeButtonsProps {
   onChange: (newMode: MODE) => void;
 }
 
-// const ModeButtonsStyles = {
-//   main: ''
-// }
+const mainClassName = `border-slate-500 w-[115px] ${styleTheme.padding.normal} ${styleTheme.border.radius.no} `;
+const activeClassName = `border-b-2 text-green-800 dark:text-green-200 ${styleTheme.font.weight.big}`;
+const disabledClassName = `disabled:border-slate-300 disabled:${styleTheme.font.weight.verySmall}`;
 
 export function ModeButtons({isRunning, active, onChange}: ModeButtonsProps) {
-  const activeClassName = 'border-b-2 text-green-800 dark:text-green-200 font-semibold';
-  const disabledClassName = 'font-thin disabled:border-slate-300';
 
-  const pomodoroStyle = clsx('p-2 border-slate-500 w-[115px]', (MODE.POMODORO === active || !active) && activeClassName, disabledClassName);
-  const breakStyle = clsx('p-2 border-slate-500 w-[115px]', MODE.BREAK === active && activeClassName, disabledClassName);
-  const longBreakStyle = clsx('p-2 border-slate-500 w-[115px]', MODE.LONGBREAK === active && activeClassName, disabledClassName);
+  const pomodoroStyle = clsx(mainClassName, (MODE.POMODORO === active || !active) && activeClassName, disabledClassName);
+  const breakStyle = clsx(mainClassName, MODE.BREAK === active && activeClassName, disabledClassName);
+  const longBreakStyle = clsx(mainClassName, MODE.LONGBREAK === active && activeClassName, disabledClassName);
 
   return (
     <div className='absolute w-full top-0 mt-3 font-mono'>

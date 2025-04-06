@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import './App.css'
 import { defaultStore, settingsReducer } from './store/reducer';
 import { useImmerReducer } from "use-immer";
 import { DispatchContext, SettingsContext } from './store/context';
@@ -13,8 +12,6 @@ function App() {
   const [settings, dispatch] = useImmerReducer(settingsReducer, defaultStore);
   const [loaded, setLoaded] = useState<boolean>(false);
 
-  
-
   useEffect(() => {
     const localStoreConfig = localStorage.getItem('settings');
     if (localStoreConfig) {
@@ -24,7 +21,6 @@ function App() {
       });
     }
     setLoaded(true);
-
 
     const reader = new FileReader();
     reader.onload = (evt) => {

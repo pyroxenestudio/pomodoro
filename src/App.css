@@ -2,41 +2,163 @@
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-body, html {
-  /* margin: 0; */
-  display: flex;
-  /* place-items: center; */
-  /* min-width: 320px; */
-  min-height: 100vh;
-  flex: 1 1 auto;
-  flex-direction: column;
-  /* color-scheme: light dark; */
+@layer base {
+  html {
+    @apply scheme-light dark:scheme-dark
+  }
+
+  body, html {
+    display: flex;
+    min-height: 100vh;
+    flex: 1 1 auto;
+    flex-direction: column;
+    text-align: center;
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    @apply bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300;
+    @apply font-normal;
+  }
+  
+  #root {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+  }
+
+  button {
+    @apply rounded-sm;
+  }
+
+  button, select {
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    cursor: none;
+    pointer-events: none;
+  }
+
+  input {
+    @apply focus:outline-none border rounded-sm font-normal p-1;
+  }
+
+  input[type='range'] {
+    @apply p-0
+  }
+
+  label {
+    @apply font-semibold;
+  }
 }
 
-#root {
-  /* Position */
-  /* max-width: 1280px; */
-  /* margin: 0 auto; */
-  /* padding: 2rem; */
-  text-align: center;
-  /* Font */
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
+@layer components {}
+
+/* TODO check if is it better use as @layer component than @utility */
+@utility level-0 {
+  background-color: var(--color-slate-100);
+  @variant dark {
+    background-color: var(--color-slate-900);
+  }
 }
 
-button, select {
-  cursor: pointer;
+@utility level-1 {
+  background-color: var(--color-slate-200);
+  @variant dark {
+    background-color: var(--color-slate-800);
+  }
 }
 
-button:disabled {
-  cursor: none;
-  pointer-events: none;
+@utility level-2 {
+  background-color: var(--color-slate-300);
+  @variant dark {
+    background-color: var(--color-slate-700);
+  }
+}
+
+@utility level-3 {
+  background-color: var(--color-slate-400);
+  @variant dark {
+    background-color: var(--color-slate-600);
+  }
+}
+
+@utility level-4 {
+  background-color: var(--color-slate-500);
+}
+
+@utility success {
+  background-color: var(--color-green-200);
+  color: var(--color-slate-800);
+  @variant dark {
+    background-color: var(--color-green-700);
+    color: var(--color-slate-100);
+  }
+  @variant hover {
+    background-color: var(--color-green-300);
+    @variant dark {
+      background-color: var(--color-green-800);
+    }
+  }
+  @variant active {
+    background-color: var(--color-green-400);
+    @variant dark {
+      background-color: var(--color-green-900);
+    }
+  }
+}
+
+@utility danger {
+  background-color: var(--color-rose-200);
+  color: var(--color-slate-800);
+  @variant dark {
+    background-color: var(--color-rose-700);
+    color: var(--color-slate-100);
+  }
+  @variant hover {
+    background-color: var(--color-rose-300);
+    @variant dark {
+      background-color: var(--color-rose-800);
+    }
+  }
+  @variant active {
+    background-color: var(--color-rose-400);
+    @variant dark {
+      background-color: var(--color-rose-900);
+    }
+  }
+}
+
+@utility warning {
+  background-color: var(--color-amber-200);
+  color: var(--color-slate-800);
+  @variant dark {
+    background-color: var(--color-amber-700);
+    color: var(--color-slate-100);
+  }
+  @variant hover {
+    background-color: var(--color-amber-300);
+    @variant dark {
+      background-color: var(--color-amber-800);
+    }
+  }
+  @variant active {
+    background-color: var(--color-amber-400);
+    @variant dark {
+      background-color: var(--color-amber-900);
+    }
+  }
+}
+
+/* Set an element in the middle of the screen with position fixed */
+@utility fixed-middle {
+  @apply fixed left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2;
+}
+
+/* Set an element in the middle of the screen with position absolute */
+@utility absolute-middle {
+  @apply absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2;
 }
