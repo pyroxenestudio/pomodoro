@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  base: '/{repo}/',
   test: {
     globals: true,
     environment: "jsdom", // Necesario para testear el DOM en React
