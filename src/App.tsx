@@ -21,11 +21,6 @@ function App() {
       });
     }
     setLoaded(true);
-
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      console.log(evt);
-    };    
   }, []);
 
   return (

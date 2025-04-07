@@ -70,7 +70,6 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
       currentAudio.current.volume = parseInt(volumeRef.current.value) / 100;
       currentAudio.current.play();
     }
-    console.log(selectSoundsRef.current?.value);
   }
 
   // RENDER
