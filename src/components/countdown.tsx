@@ -59,7 +59,7 @@ const CountDown = function() {
         // Play Sound
         audio.volume = settings.volume/100;
         audio.play();
-        if (interval.current == settings.interval) {
+        if (interval.current == settings.interval && settings.mode === MODE.POMODORO) {
           interval.current = 0;
           dispatch({
             type: 'mode',
@@ -98,7 +98,7 @@ const CountDown = function() {
   return (
     <>
       {/* Percentage Bar */}
-      {timer.isRunning ? <span className='fixed top-0 bg-slate-600 dark:bg-slate-300 h-2' style={{width: `${timer.time?.percentage}%`}}/> : null}
+      {<span className='fixed top-0 bg-slate-600 dark:bg-slate-300 h-2' style={{width: `${timer.time?.percentage}%`}}/>}
       {/* Mode buttons */}
       <ModeButtons isRunning={timer.isRunning} active={settings.mode} onChange={changeMode}/>
       {/* Timer */}

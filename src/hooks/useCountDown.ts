@@ -41,15 +41,14 @@ export default function useCountDown(maxMinutes: number, callback?: () => void) 
 
       if (minutes > 0 || seconds > 0) {
         timeout.current = setTimeout(updateClock, nextInterval);
+        setTime({
+          minutes,
+          seconds,
+          percentage
+        });
       } else {
         stopByInterval();
       }
-
-      setTime({
-        minutes,
-        seconds,
-        percentage
-      });
     }
   }
 
@@ -125,10 +124,18 @@ export default function useCountDown(maxMinutes: number, callback?: () => void) 
     setTime({
       minutes: maxMinutes,
       seconds: 0,
-      percentage: 0
+      percentage: 100
     });
     setIsRunning(false);
     setIsPause(false);
+    // Remove the percentage after 1 second
+    setTimeout(() => {
+      setTime({
+        minutes: maxMinutes,
+        seconds: 0,
+        percentage: 0
+      });
+    }, 1000);
   }
 
   const stop = function() {
