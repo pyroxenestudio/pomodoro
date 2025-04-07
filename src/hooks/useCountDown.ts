@@ -29,12 +29,16 @@ export default function useCountDown(maxMinutes: number, callback?: () => void) 
   const updateClock = function() {
     if (startTime.current) {
       const elapsedTime = performance.now() - startTime.current;
-
-      // Fix interval to be always 1 seconds (1000)
-      const nextInterval = 1000 - (elapsedTime % 1000);
-      const minutes = Math.floor(maxMinutes - (elapsedTime / 60000));
+      const nextInterval = 1000 - (elapsedTime % 1000); // Fix interval to be always 1 seconds (1000)
+      let minutes = Math.floor(maxMinutes - (elapsedTime / 60000));
       const seconds = 59 - Math.floor((elapsedTime % 60000) / 1000);
       const percentage = Math.floor((elapsedTime * 100) / (maxMinutes * 60000));
+
+      // This is because at first the minutes maybe is exactly 1
+      if (minutes === maxMinutes) {
+        minutes -= 1;
+      }
+
       if (minutes > 0 || seconds > 0) {
         timeout.current = setTimeout(updateClock, nextInterval);
       } else {
@@ -114,6 +118,7 @@ export default function useCountDown(maxMinutes: number, callback?: () => void) 
   }
 
   // TODO use only one stopInterval
+  // TODO Eliminar el intervalo
   const stopByInterval = function() {
     clearTimeout(timeout.current);
     startTime.current = 0;
