@@ -1,9 +1,8 @@
-import { useContext, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import useCountDown from "../hooks/useCountDown";
 import { DispatchContext, SettingsContext } from "../store/context";
 import { MODE } from "../store/reducer";
 import Button from "./elements/button";
-// import rocket from '../assets/audio/rocket.mp3';
 import Sounds from '../sounds';
 import { ModeButtons } from "./groups/mode-buttons";
 import { PlayIcon, PauseIcon } from "@heroicons/react/24/solid";
@@ -13,8 +12,8 @@ const CountDown = function() {
   const settings = useContext(SettingsContext)!;
   const dispatch = useContext(DispatchContext)!;
 
-  const [audio,] = useState<HTMLAudioElement>(() => {
-    return new Audio(Sounds.rocket);
+  const [audio,setAudio] = useState<HTMLAudioElement>(() => {
+    return new Audio(Sounds[settings.sound]);
   });
 
   // VARIABLES
@@ -42,7 +41,7 @@ const CountDown = function() {
         throw new Error("This mode doesn't exist");
     }
     return minute;
-  }, [settings]);
+  }, [settings.mode, settings.pomodoro, settings.break, settings.longBreak]);
 
   const timer = useCountDown(minuteByMode, changeMode);
 
@@ -85,6 +84,9 @@ const CountDown = function() {
   }
 
   // EFFECTS
+  useEffect(() => {
+    setAudio(new Audio(Sounds[settings.sound]));
+  }, [settings.sound]);
 
   // RENDER VARIABLES
   const min = timer.isRunning ? timer.time?.minutes.toString().padStart(2, '0') : minuteByMode.toString().padStart(2, '0');

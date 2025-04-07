@@ -43,7 +43,7 @@
     pointer-events: none;
   }
 
-  input {
+  input, select {
     @apply focus:outline-none border rounded-sm font-normal p-1;
   }
 
@@ -150,6 +150,27 @@
     background-color: var(--color-amber-400);
     @variant dark {
       background-color: var(--color-amber-900);
+    }
+  }
+}
+
+@utility info {
+  background-color: var(--color-sky-200);
+  color: var(--color-slate-800);
+  @variant dark {
+    background-color: var(--color-sky-700);
+    color: var(--color-slate-100);
+  }
+  @variant hover {
+    background-color: var(--color-sky-300);
+    @variant dark {
+      background-color: var(--color-sky-800);
+    }
+  }
+  @variant active {
+    background-color: var(--color-sky-400);
+    @variant dark {
+      background-color: var(--color-sky-900);
     }
   }
 }

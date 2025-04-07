@@ -11,6 +11,7 @@ const labelInputStyle = {
 interface LabelInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   vertical?: boolean;
   title: string;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
 export default function LabelInput({title, type, ...rest}: LabelInputProps) {
@@ -21,9 +22,9 @@ export default function LabelInput({title, type, ...rest}: LabelInputProps) {
   );
 
   return (
-    <label className={`flex flex-col text-left mb-1 ${styleTheme.font.weight.big}`} htmlFor={rest.name}>
+    <label className={`flex flex-col text-left mb-2 ${styleTheme.font.weight.big}`} htmlFor={rest.name}>
       <span>{title}</span>
-      <input className={inputStyle} type={type} {...rest} id={rest.name}/>
+      <input className={inputStyle} id={rest.name} type={type} {...rest}/>
     </label>
   )
 }

@@ -5,6 +5,7 @@ const buttonStyle = {
   success: 'success',
   danger: 'danger',
   warning: 'warning',
+  info: 'info'
 }
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
