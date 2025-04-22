@@ -2,7 +2,7 @@ import Modal from "../modal";
 
 export function Footer() {
   return (
-    <footer className='h-12 flex justify-center items-center'>
+    <footer className='min-h-16 flex justify-center items-center'>
       <Modal title='About' icon={<span>About</span>} buttonStyles='p-2'>
         <section>
           <h2 className='text-2xl'>Features</h2>
@@ -15,7 +15,7 @@ export function Footer() {
           <h2 className='text-2xl mt-2'>Sounds</h2>
           <ul>
             <li><a href='https://pixabay.com/sound-effects/dog-bark-type-01-293298/'>Dog by RibhavAgrawal</a></li>
-            <li><a href='https://pixabay.com/sound-effects/dog-bark-type-01-293298/'>Cat by RibhavAgrawal</a></li>
+            <li><a href='https://pixabay.com/sound-effects/cat-meowing-type-02-293290/'>Cat by RibhavAgrawal</a></li>
             <li><a href='https://pixabay.com/sound-effects/rocket-launch-306441/'>Rocket by SonixFXSounds</a></li>
           </ul>
         </section>
@@ -32,7 +32,6 @@ export function Footer() {
           </ul>
         </section>
       </Modal>
-      {/* <Button variant='transparent' className='!font-normal'><a href='#'>Pyroxene</a></Button> */}
     </footer>
   )
 }

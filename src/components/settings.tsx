@@ -1,6 +1,6 @@
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { DispatchContext, SettingsContext } from "../store/context";
-import { IStore, soundType } from "../store/reducer";
+import { ISettings, IStore, soundType } from "../store/reducer";
 import LabelInput from "./groups/label-input";
 import Button from "./elements/button";
 import LabelSelect from "./groups/label-select";
@@ -10,11 +10,12 @@ interface IProps {
   closeCallBackModal?: () => void; 
 }
 
+
 const AppSettings = function ({closeCallBackModal}: IProps) {
   // PROPS
 
   // CONTEXT
-  const settings = useContext(SettingsContext);
+  const settings = useContext(SettingsContext)!;
   const dispatch = useContext(DispatchContext)!;
 
   // STATES
@@ -25,24 +26,30 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
   const currentAudio = useRef<HTMLAudioElement>(null);
 
   // EFFECTS
+  // Save the settings in the localstore
+  useEffect(() => {
+    const newSettings: ISettings = {
+      pomodoro: settings.pomodoro,
+      break: settings.break,
+      longBreak: settings?.longBreak,
+      interval: settings?.interval, // How many breaks between Long breaks. Ej: 1 would mean only one break. 
+      sound: settings?.sound,
+      volume: settings?.volume,
+    }
+    localStorage.setItem('settings', JSON.stringify(newSettings));
+  }, [settings]);
 
   // METHODS
   function save(formData: FormData) {
     // Get data from the form
-    const newSettingsData: IStore = {
+    const newSettingsData: Omit<IStore, 'isRunning'> = {
       pomodoro: parseInt(formData.get('pomodoro') as string),
       break: parseInt(formData.get('break') as string),
       longBreak: parseInt(formData.get('longbreak') as string),
       interval: parseInt(formData.get('interval') as string),
       sound: formData.get('sounds') as soundType,
-      volume: parseInt(formData.get('volume') as string)
+      volume: parseInt(formData.get('volume') as string),
     }
-    // Join old settings width new Settings and save it in the localstore
-    const stringSettings = localStorage.getItem('settings');
-    const oldSettings = stringSettings ? JSON.parse(stringSettings) : {};
-    const newSettings = Object.assign({}, oldSettings, newSettingsData);
-
-    localStorage.setItem('settings', JSON.stringify(newSettings));
 
     // Close Modal
     if (closeCallBackModal) {
@@ -56,7 +63,7 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
     }
     dispatch({
       type: 'saveConfig',
-      payload: newSettingsData
+      payload: newSettingsData as ISettings
     });
   }
   // Try the audio and volume

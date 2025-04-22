@@ -27,13 +27,14 @@ function Modal({title, children, icon, buttonStyles, hasCallback = false}: IProp
     <>
       {isOpen && (
         <>
-          <div className={`overlay fixed ${styleTheme.background.level_2} top-0 left-0 size-full z-1`} onClick={() => {setIsOpen((oldValue) => !oldValue)}}/>
+          <div aria-modal role='dialog' className={`overlay fixed ${styleTheme.background.level_2} top-0 left-0 size-full z-1`} onClick={() => {setIsOpen((oldValue) => !oldValue)}}/>
           <aside className={`
             fixed-middle
             h-[800px]
             w-[600px]
             max-h-full
             max-w-full
+            overflow-y-auto
             ${styleTheme.background.level_0}
             ${styleTheme.padding.normal}
             ${styleTheme.border.radius.normal}

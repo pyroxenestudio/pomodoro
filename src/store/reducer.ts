@@ -9,19 +9,23 @@ export enum MODE {
 export type soundType = 'rocket' | 'cat' | 'dog';
 
 export type ACTIONTYPE =
-  | { type: "saveConfig"; payload: IStore }
+  | { type: "saveConfig"; payload: ISettings }
   | { type: 'mode'; payload: MODE }
   | { type: 'colorScheme'; payload: COLORSCHEME }
+  | { type: 'countDownIsRunning'; payload: boolean }
 
-export interface IStore {
+export interface ISettings {
   pomodoro: number;
   break: number;
   longBreak: number;
   interval: number; // How many breaks between Long breaks. Ej: 1 would mean only one break. 
-  mode?: MODE;
   sound: soundType
   volume: number;
-  colorScheme?: COLORSCHEME
+}
+
+export interface IStore extends ISettings {
+  isRunning: boolean;
+  mode?: MODE;
 }
 
 export const defaultStore: IStore = {
@@ -32,18 +36,22 @@ export const defaultStore: IStore = {
   mode: MODE.POMODORO,
   sound: 'rocket',
   volume: 100,
-  colorScheme: window.matchMedia('(prefers-color-scheme: dark)').matches ? COLORSCHEME.dark : COLORSCHEME.light
+  // colorScheme: window.matchMedia('(prefers-color-scheme: dark)').matches ? COLORSCHEME.dark : COLORSCHEME.light,
+  isRunning: false
 }
 
 export function settingsReducer(draft: IStore, action: ACTIONTYPE) {
   switch (action.type) {
     case 'saveConfig':
-      return Object.assign(draft, action.payload);
+      return Object.assign({}, draft, action.payload);
     case 'mode':
       draft.mode = action.payload;
       break;
-    case 'colorScheme':
-      draft.colorScheme = action.payload;
+    // case 'colorScheme':
+    //   draft.colorScheme = action.payload;
+    //   break;
+    case 'countDownIsRunning':
+      draft.isRunning = action.payload;
       break;
     default:
       throw new Error("Action Not Found");

@@ -6,8 +6,6 @@ import CountDown from './components/countdown';
 import { NavBar } from './components/groups/navbar';
 import { Footer } from './components/groups/footer';
 
-
-
 function App() {
   const [settings, dispatch] = useImmerReducer(settingsReducer, defaultStore);
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -22,7 +20,7 @@ function App() {
     }
     setLoaded(true);
   }, []);
-
+  console.log('settings APP', settings);
   return (
     <>
       {loaded ? <SettingsContext.Provider value={settings}>
