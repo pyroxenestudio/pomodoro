@@ -21,6 +21,6 @@ It just a Pomodoro, you select the time for every mode (Pomodoro, Break and Long
 - [Rocket - SonixFXSounds](https://pixabay.com/sound-effects/dog-bark-type-01-293298/)
 
 ## Images
-![dark-1.0](src/assets/images/dark_1.0_medium.jpeg)
-![light-1.0](src/assets/images/light_1.0_medium.jpeg)
-![settings-1.0](src/assets/images/settings_1.0_medium.jpeg)
+![dark-1.0](public/dark_1.0_medium.jpeg)
+![light-1.0](public/light_1.0_medium.jpeg)
+![settings-1.0](public/settings_1.0_medium.jpeg)
