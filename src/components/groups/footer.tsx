@@ -27,7 +27,7 @@ export function Footer() {
             <li>Sounds Dog, Car, Rocket</li>
             <li>Countdown with Pomodoro, Break, Long Break</li>
             <li>Dark/Light themes</li>
-            <li>Settings and saved in the localstore</li>
+            <li>The information is saved in the localStorage</li>
           </ul>
         </section>
       </Modal>
