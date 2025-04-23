@@ -15,7 +15,8 @@ export default function () {
     return new Audio(Sounds[settings.sound]);
   });
 
-  function nextMode() {
+  function nextMode(userEvent: boolean = false) {
+    if (userEvent) return;
     if (settings.interval === howManyBreaks.current) {
       dispatch({
         type: 'mode',
