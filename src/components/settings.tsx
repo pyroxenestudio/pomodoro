@@ -24,10 +24,12 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
   const selectSoundsRef = useRef<HTMLSelectElement>(null);
   const volumeRef = useRef<HTMLInputElement>(null);
   const currentAudio = useRef<HTMLAudioElement>(null);
+  const isSaved = useRef<boolean>(false);
 
   // EFFECTS
   // Save the settings in the localstore
   useEffect(() => {
+    
     const newSettings: ISettings = {
       pomodoro: settings.pomodoro,
       break: settings.break,
@@ -36,7 +38,15 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
       sound: settings?.sound,
       volume: settings?.volume,
     }
-    localStorage.setItem('settings', JSON.stringify(newSettings));
+
+    if (isSaved.current) {
+      localStorage.setItem('settings', JSON.stringify(newSettings));
+    }
+
+    // Close Modal
+    if (closeCallBackModal && isSaved.current) {
+      closeCallBackModal();
+    };
   }, [settings]);
 
   // METHODS
@@ -51,20 +61,18 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
       volume: parseInt(formData.get('volume') as string),
     }
 
-    // Close Modal
-    if (closeCallBackModal) {
-      closeCallBackModal()
-    };
-
     // Stop Audio
     if (currentAudio.current) {
       currentAudio.current.pause();
       currentAudio.current = null;
     }
+
     dispatch({
       type: 'saveConfig',
       payload: newSettingsData as ISettings
     });
+
+    isSaved.current = true;
   }
   // Try the audio and volume
   const testSound = (e: React.MouseEvent<HTMLButtonElement>) => {
