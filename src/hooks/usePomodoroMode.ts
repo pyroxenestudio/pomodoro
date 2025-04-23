@@ -7,7 +7,7 @@ export default function () {
   // STORE
   const settings = useContext(SettingsContext)!;
   const dispatch = useContext(DispatchContext)!;
-  console.log('settings', settings);
+
   // REFS
   const howManyBreaks = useRef<number>(0);
 
@@ -22,27 +22,26 @@ export default function () {
         payload: MODE.LONGBREAK
       });
       howManyBreaks.current = 0;
-      return true;
+    } else {
+      switch (settings.mode) {
+        case MODE.POMODORO:
+          dispatch({
+            type: 'mode',
+            payload: MODE.BREAK
+          });
+          break;
+        case MODE.BREAK:
+        case MODE.LONGBREAK:
+          dispatch({
+            type: 'mode',
+            payload: MODE.POMODORO
+          });
+          howManyBreaks.current++;
+          break;
+      }
     }
-    switch (settings.mode) {
-      case MODE.POMODORO:
-        dispatch({
-          type: 'mode',
-          payload: MODE.BREAK
-        });
-        break;
-      case MODE.BREAK:
-      case MODE.LONGBREAK:
-        dispatch({
-          type: 'mode',
-          payload: MODE.POMODORO
-        });
-        break;
-    }
-    howManyBreaks.current++;
     audio.volume = settings.volume/100;
     audio.play();
-    return true;
   }
 
   function changeMode(mode: MODE) {
@@ -73,6 +72,7 @@ export default function () {
   return {
     mode: settings.mode,
     time: getTimeByMode(),
+    howManyBreaks: howManyBreaks.current,
     nextMode,
     changeMode
   }

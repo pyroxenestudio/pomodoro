@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { MoonIcon } from '@heroicons/react/24/outline'
 import { SunIcon } from '@heroicons/react/24/solid'
-import { styleTheme } from "../../theme";
+import { styleTheme } from "../theme";
 
 export enum COLORSCHEME {
   'dark',

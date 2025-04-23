@@ -10,7 +10,6 @@ export function Footer() {
             <li>Dark / Light Mode</li>
             <li>Set your time (Pomodoro, Break, Long Break)</li>
             <li>Sound Alert</li>
-            <li>Stop render in the background</li>
           </ul>
           <h2 className='text-2xl mt-2'>Sounds</h2>
           <ul>

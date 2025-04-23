@@ -20,7 +20,6 @@ function App() {
     }
     setLoaded(true);
   }, []);
-  console.log('settings APP', settings);
   return (
     <>
       {loaded ? <SettingsContext.Provider value={settings}>

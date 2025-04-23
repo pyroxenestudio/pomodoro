@@ -5,11 +5,11 @@ import LabelInput from "./groups/label-input";
 import Button from "./elements/button";
 import LabelSelect from "./groups/label-select";
 import Sounds from '../sounds';
+import { styleTheme } from "../theme";
 
 interface IProps {
   closeCallBackModal?: () => void; 
 }
-
 
 const AppSettings = function ({closeCallBackModal}: IProps) {
   // PROPS
@@ -81,16 +81,21 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
 
   // RENDER
   return (
-    <form action={save}>
-      <LabelInput name='pomodoro' title={'Pomodoro'} type='number' defaultValue={settings?.pomodoro}/>
-      <LabelInput name='break' title={'Break'} type='number' defaultValue={settings?.break}/>
-      <LabelInput name='longbreak' title={'Long Break'} type='number' defaultValue={settings?.longBreak}/>
-      <LabelInput name='interval' title={'How many breaks before Long Break'} type='number' defaultValue={settings?.interval}/>
-      <LabelInput name='volume' title={'Volume'} type='range' defaultValue={settings?.volume} max='100' min='0' ref={volumeRef}/>
-      <LabelSelect title='Sounds' options={Object.keys(Sounds)} name='sounds' defaultValue={settings?.sound} ref={selectSoundsRef}/>
-      <Button variant='info' onClick={testSound} className='flex flex-col text-left mb-1'>Test Sound</Button>
-      <Button type='submit' className='w-30 mt-3' variant="success">Save</Button>
-    </form>
+    <>
+      <aside className={`info mb-2 ${styleTheme.padding.normal}`}>
+      You can move between browsers' tabs, but If the tab get inactive, the clock will stop.
+      </aside>
+      <form action={save}>
+        <LabelInput name='pomodoro' title={'Pomodoro'} type='number' defaultValue={settings?.pomodoro}/>
+        <LabelInput name='break' title={'Break'} type='number' defaultValue={settings?.break}/>
+        <LabelInput name='longbreak' title={'Long Break'} type='number' defaultValue={settings?.longBreak}/>
+        <LabelInput name='interval' title={'How many breaks before Long Break'} type='number' defaultValue={settings?.interval}/>
+        <LabelInput name='volume' title={'Volume'} type='range' defaultValue={settings?.volume} max='100' min='0' ref={volumeRef}/>
+        <LabelSelect title='Sounds' options={Object.keys(Sounds)} name='sounds' defaultValue={settings?.sound} ref={selectSoundsRef}/>
+        <Button variant='info' onClick={testSound} className='flex flex-col text-left mb-1'>Test Sound</Button>
+        <Button type='submit' className='w-30 mt-3' variant="success">Save</Button>
+      </form>
+    </>
   );
 }
 

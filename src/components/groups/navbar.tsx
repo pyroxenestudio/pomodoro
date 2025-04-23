@@ -1,5 +1,5 @@
 import { Cog6ToothIcon } from "@heroicons/react/24/solid";
-import { ColorScheme } from "../elements/color-scheme";
+import { ColorScheme } from "../color-scheme";
 import Modal from "../modal";
 import AppSettings from "../settings";
 import { SettingsContext } from "../../store/context";
@@ -21,7 +21,8 @@ export function NavBar() {
             buttonStyles="p-2"
             title='Settings'
             icon={<Cog6ToothIcon className='size-10'/>}
-            hasCallback>
+            hasCallback
+            canOpenModal={!settings.isRunning}>
             <AppSettings />
           </Modal>
         </div>

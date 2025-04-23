@@ -7,8 +7,8 @@ interface ModeButtonsProps {
   isRunning: boolean;
 }
 
-const mainClassName = `border-slate-500 w-[115px] ${styleTheme.padding.normal} ${styleTheme.border.radius.no} `;
-const activeClassName = `border-b-2 text-green-800 dark:text-green-200 ${styleTheme.font.weight.big}`;
+const mainClassName = `w-[115px] relative ${styleTheme.padding.normal} ${styleTheme.border.radius.no}`;
+const activeClassName = `text-green-800 dark:text-green-200 after:content-[''] after:border-b-2 after:border-slate-500 after:w-full after:absolute after:left-0 after:bottom-3 ${styleTheme.font.weight.big}`;
 const disabledClassName = `disabled:border-slate-300 disabled:${styleTheme.font.weight.verySmall}`;
 
 export function ModeButtons({isRunning}: ModeButtonsProps) {

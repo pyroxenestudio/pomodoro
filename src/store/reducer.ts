@@ -1,4 +1,4 @@
-import { COLORSCHEME } from "../components/elements/color-scheme";
+import { COLORSCHEME } from "../components/color-scheme";
 
 export enum MODE {
   'POMODORO',
@@ -36,7 +36,6 @@ export const defaultStore: IStore = {
   mode: MODE.POMODORO,
   sound: 'rocket',
   volume: 100,
-  // colorScheme: window.matchMedia('(prefers-color-scheme: dark)').matches ? COLORSCHEME.dark : COLORSCHEME.light,
   isRunning: false
 }
 
@@ -47,9 +46,6 @@ export function settingsReducer(draft: IStore, action: ACTIONTYPE) {
     case 'mode':
       draft.mode = action.payload;
       break;
-    // case 'colorScheme':
-    //   draft.colorScheme = action.payload;
-    //   break;
     case 'countDownIsRunning':
       draft.isRunning = action.payload;
       break;

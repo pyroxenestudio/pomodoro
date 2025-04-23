@@ -10,12 +10,10 @@ interface IProps {
   icon: React.JSX.Element;
   buttonStyles?: string;
   hasCallback?: boolean;
+  canOpenModal?: boolean
 }
 
-function Modal({title, children, icon, buttonStyles, hasCallback = false}: IProps) {
-  // Props
-  // const  = props;
-
+function Modal({title, children, icon, buttonStyles, canOpenModal = true, hasCallback = false}: IProps) {
   // States
   const [isOpen, setIsOpen] = useState<boolean>(false);
   
@@ -23,6 +21,12 @@ function Modal({title, children, icon, buttonStyles, hasCallback = false}: IProp
    hasCallback ? React.cloneElement(children, {closeCallBackModal: () => {setIsOpen((oldValue) => !oldValue)}}) : children
   );
 // h-[500px] w-[300px]
+  // METHODS
+  const openModal = function () {
+    if (canOpenModal) {
+      setIsOpen((oldValue) => !oldValue)
+    }
+  }
   return (
     <>
       {isOpen && (
@@ -50,7 +54,7 @@ function Modal({title, children, icon, buttonStyles, hasCallback = false}: IProp
           </aside>
         </>
       )}
-      {!isOpen && <button className={buttonStyles} onClick={() => {setIsOpen((oldValue) => !oldValue)}}>{icon}</button>}
+      {!isOpen && <button className={buttonStyles} onClick={openModal}>{icon}</button>}
     </>
   )
 }
