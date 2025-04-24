@@ -14,13 +14,13 @@ export function NavBar() {
   const settings = useContext(SettingsContext)!;
   return (
     <>
-      <div id='navbar' className='min-h-16 flex flex-col landscape:flex-row'>
-        <div className="flex justify-end landscape:order-1">
+      <div id='navbar' className='min-h-16 flex flex-col relative'>
+        <div className="flex justify-end h-16 landscape:absolute landscape:right-0">
           <ColorScheme />
           <Modal
             buttonStyles="p-2"
             title='Settings'
-            icon={<Cog6ToothIcon className='size-10'/>}
+            icon={<Cog6ToothIcon className='h-full'/>}
             hasCallback
             canOpenModal={!settings.isRunning}>
             <AppSettings />
