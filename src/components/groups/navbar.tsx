@@ -18,7 +18,7 @@ export function NavBar() {
         <div className="flex justify-end h-16 landscape:absolute landscape:right-0">
           <ColorScheme />
           <Modal
-            buttonStyles="p-2"
+            buttonStyles="p-2 h-full"
             title='Settings'
             icon={<Cog6ToothIcon className='h-full'/>}
             hasCallback
