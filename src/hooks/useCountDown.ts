@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-const DEV = import.meta.env.DEV
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import Alert from "../components/alert";
+
+dayjs.extend(relativeTime);
 
 // TODO It is using many useState for get the status, try to reduce it and change some of them to useRef
 export default function useCountDown(maxMinutes: number, callback?: (sound: boolean) => void) {
@@ -10,10 +14,12 @@ export default function useCountDown(maxMinutes: number, callback?: (sound: bool
   const [isPause, setIsPause] = useState<boolean>(false);
   // The minutes and seconds
   const [time, setTime] = useState<{minutes: number, seconds: number, percentage: number}>();
+  // Hidden
+  const [isHidden, setIsHidden] = useState<boolean>(false);
+  // Alert when tab is from resume information
+  const [freezeTime, setFreezeTime] = useState<string | null>(null);
 
   // REF
-  // timeout when the tab is in the background
-  const hiddenTimer = useRef<ReturnType<typeof setTimeout> | number>(undefined);
   // time in milliseconds when the clock started
   const startTime = useRef<number>(0);
   // default timeout when the clock is running
@@ -50,30 +56,34 @@ export default function useCountDown(maxMinutes: number, callback?: (sound: bool
   // is called when the tab is in the background
   const backgroundClock = useCallback(function() {
     if (isPause) return;
-    if (document.hidden) {
-      if (startTime.current) {
-        clearTimeout(timeout.current);
-        const elapsedTime = performance.now() - startTime.current;
-        hiddenTimer.current = setTimeout(() => {
-          stop();
-        }, maxMinutes * 60000 - elapsedTime);
-      }
-    } else {
-      clearTimeout(hiddenTimer.current);
-      // ONLY FOR DEVELOP
-      if (DEV) {
-        clearTimeout(hiddenTimer.current ? hiddenTimer.current as number - 1 : hiddenTimer.current);
-      }
-      updateClock();
+    setIsHidden(document.hidden);
+  }, [isPause, isRunning]);
+
+  const backgroundFreeze = useCallback(function () {
+    localStorage.setItem('frozenTime', Date.now().toString());
+  }, [isPause, isRunning]);
+
+  const backgroundResume = useCallback(function () {
+    let localstorageTime: string | number | null = localStorage.getItem('frozenTime');
+    if (localstorageTime) {
+      localstorageTime = parseFloat(localstorageTime);
+      setFreezeTime(dayjs(localstorageTime).fromNow());
     }
+    
   }, [isPause, isRunning]);
 
   // Remove and add event listener visibilitychange for backgroundClock function
   useEffect(() => {
     if (!isPause && isRunning) {
       document.addEventListener('visibilitychange', backgroundClock);
+      document.addEventListener('freeze', backgroundFreeze);
+      document.addEventListener('resume', backgroundResume);
     }
-    return () => document.removeEventListener('visibilitychange', backgroundClock);
+    return () => {
+      document.removeEventListener('visibilitychange', backgroundClock);
+      document.removeEventListener('freeze', backgroundFreeze);
+      document.removeEventListener('resume', backgroundResume);
+    };
   },[isPause, isRunning]);
 
   const start = function() {
@@ -139,6 +149,11 @@ export default function useCountDown(maxMinutes: number, callback?: (sound: bool
     pause,
     time,
     isRunning,
-    isPause
+    isPause,
+    isHidden,
+    freezeTime: {
+      message: freezeTime,
+      callback: () => setFreezeTime(null)
+    }
   };
 }
