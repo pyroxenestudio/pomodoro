@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitest/config';
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
+// import basicSsl from '@vitejs/plugin-basic-ssl'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -10,5 +11,5 @@ export default defineConfig({
     globals: true,
     environment: "jsdom", // Necesario para testear el DOM en React
     setupFiles: "./setupTests.ts", // Archivo opcional para configurar Testing Library
-  },
+  }
 })

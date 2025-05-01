@@ -175,6 +175,15 @@
   }
 }
 
+@utility warning-no-interactive {
+  background-color: var(--color-amber-200);
+  color: var(--color-slate-800);
+  @variant dark {
+    background-color: var(--color-amber-700);
+    color: var(--color-slate-100);
+  }
+}
+
 /* Set an element in the middle of the screen with position fixed */
 @utility fixed-middle {
   @apply fixed left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2;
