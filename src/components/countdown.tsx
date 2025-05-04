@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 import { useContext, useEffect, useRef} from "react";
 import useCountDown from "../hooks/useCountDown";
-import { DispatchContext } from "../store/context";
+import { DispatchContext, SettingsContext } from "../store/context";
 import { PlayIcon, PauseIcon, StopIcon } from "@heroicons/react/24/solid";
 import usePomodoroMode from "../hooks/usePomodoroMode";
 import Alert from "./alert";
@@ -9,9 +9,10 @@ import Alert from "./alert";
 const CountDown = function() {
   // CONTEXT
   const dispatch = useContext(DispatchContext)!;
+  const settings = useContext(SettingsContext)!;
   // HOOKS
   const pomodoroMode = usePomodoroMode();
-  const timer = useCountDown(pomodoroMode.time, pomodoroMode.nextMode);
+  const timer = useCountDown(pomodoroMode.time, settings.inactiveNotification, pomodoroMode.nextMode);
   // REFS
   const titleEmpty = useRef<boolean>(false);
 
@@ -63,7 +64,7 @@ const CountDown = function() {
   return (
     <>
       {<span className='fixed top-0 bg-slate-600 dark:bg-slate-300 h-2' style={{width: `${timer.time?.percentage}%`}}/>}
-      {timer.freezeTime.message ? <Alert title='Resume tab from freeze' accept={timer.freezeTime.callback}>{timer.freezeTime.message}</Alert> : null}
+      {timer.freezeTime.message ? <Alert title='Resume tab from inactive' accept={timer.freezeTime.callback}>{timer.freezeTime.message}</Alert> : null}
       {timer.isHidden && createPortal(<>{min}:{sec}</>, document.querySelector('title') as HTMLElement, 'title')}
       {!timer.isHidden && clockDownUI}
     </>

@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import Alert from "../components/alert";
+import InactiveNotification from "../utils/inactive-notification";
 
 dayjs.extend(relativeTime);
 
 // TODO It is using many useState for get the status, try to reduce it and change some of them to useRef
-export default function useCountDown(maxMinutes: number, callback?: (sound: boolean) => void) {
+export default function useCountDown(maxMinutes: number, inactiveNotification: InactiveNotification, callback?: (sound: boolean) => void) {
   // STATES
   // check if is running or not
   const [isRunning, setIsRunning] = useState<boolean>(false);
@@ -26,6 +26,8 @@ export default function useCountDown(maxMinutes: number, callback?: (sound: bool
   const timeout = useRef<ReturnType<typeof setTimeout>>(undefined);
   // Time passed before the clock is paused
   const lastElapsedTime = useRef<number>(null);
+  // Worker to set the timeout
+  // const worker = useRef<Worker>(null);
 
   const updateClock = function() {
     if (startTime.current) {
@@ -34,40 +36,53 @@ export default function useCountDown(maxMinutes: number, callback?: (sound: bool
       let minutes = Math.floor(maxMinutes - (elapsedTime / 60000));
       const seconds = 59 - Math.floor((elapsedTime % 60000) / 1000);
       const percentage = (elapsedTime * 100) / (maxMinutes * 60000);
+      
+      // If the tab is inactive, it can resume with negative minutes or seconds
+      // That is why the minor or equal
+      if (minutes <= 0 && seconds <= 0) {
+        stop();
+        return;
+      }
 
       // This is because at first the minutes maybe is exactly 1
       if (minutes === maxMinutes) {
         minutes -= 1;
       }
 
-      if (minutes > 0 || seconds > 0) {
-        timeout.current = setTimeout(updateClock, nextInterval);
-        setTime({
-          minutes,
-          seconds,
-          percentage
-        });
-      } else {
-        stop();
-      }
+      timeout.current = setTimeout(updateClock, nextInterval);
+      setTime({
+        minutes,
+        seconds,
+        percentage
+      });
     }
   }
 
   // is called when the tab is in the background
   const backgroundClock = useCallback(function() {
     if (isPause) return;
+    if (document.hidden) {
+      // Esto es para el backgroundFreeze, pero lo estoy probando aqui
+      const timeNow = performance.now();
+      localStorage.setItem('frozenTime', timeNow.toString());
+    } else {
+      inactiveNotification.stopNotification();
+      // stop(true);
+    }
     setIsHidden(document.hidden);
   }, [isPause, isRunning]);
 
   const backgroundFreeze = useCallback(function () {
     localStorage.setItem('frozenTime', Date.now().toString());
+    inactiveNotification.createInactiveNotification({message: 'Se murio', time: 5000});
   }, [isPause, isRunning]);
 
   const backgroundResume = useCallback(function () {
+    inactiveNotification.stopNotification();
     let localstorageTime: string | number | null = localStorage.getItem('frozenTime');
     if (localstorageTime) {
       localstorageTime = parseFloat(localstorageTime);
-      setFreezeTime(dayjs(localstorageTime).fromNow());
+      setFreezeTime(`The page was inactive for: ${dayjs(localstorageTime).fromNow()}`);
     }
     
   }, [isPause, isRunning]);
@@ -90,7 +105,6 @@ export default function useCountDown(maxMinutes: number, callback?: (sound: bool
     if (isRunning) return;
     startTime.current = performance.now();
     setIsRunning(true);
-    // setWasStopped(false);
     updateClock();
   }
 
@@ -109,7 +123,12 @@ export default function useCountDown(maxMinutes: number, callback?: (sound: bool
     }
   }
 
-  const stop = function(event?: React.MouseEvent | false) {
+  const getRestTime = () => {
+    const elapsedTime = performance.now() - startTime.current;
+    return (maxMinutes * 60000) - elapsedTime;
+  }
+
+  const stop = function(event?: React.MouseEvent | boolean) {
     const isAnUserEvent: boolean = !!event;
     clearTimeout(timeout.current);
     startTime.current = 0;

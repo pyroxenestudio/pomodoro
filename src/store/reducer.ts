@@ -1,4 +1,5 @@
 import { COLORSCHEME } from "../components/color-scheme";
+import InactiveNotification from "../utils/inactive-notification";
 
 export enum MODE {
   'POMODORO',
@@ -26,7 +27,10 @@ export interface ISettings {
 export interface IStore extends ISettings {
   isRunning: boolean;
   mode?: MODE;
+  inactiveNotification: InactiveNotification;
 }
+
+const inactiveNotification = new InactiveNotification();
 
 export const defaultStore: IStore = {
   pomodoro: 30,
@@ -36,7 +40,8 @@ export const defaultStore: IStore = {
   mode: MODE.POMODORO,
   sound: 'rocket',
   volume: 100,
-  isRunning: false
+  isRunning: false,
+  inactiveNotification: inactiveNotification
 }
 
 export function settingsReducer(draft: IStore, action: ACTIONTYPE) {
