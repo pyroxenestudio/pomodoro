@@ -1,5 +1,5 @@
 import { COLORSCHEME } from "../components/color-scheme";
-import InactiveNotification from "../utils/inactive-notification";
+// import InactiveNotification from "../utils/inactive-notification";
 
 export enum MODE {
   'POMODORO',
@@ -22,16 +22,15 @@ export interface ISettings {
   interval: number; // How many breaks between Long breaks. Ej: 1 would mean only one break. 
   sound: soundType
   volume: number;
-  notificationPermission: boolean;
 }
 
 export interface IStore extends ISettings {
   isRunning: boolean;
   mode?: MODE;
-  inactiveNotification: InactiveNotification;
+  // inactiveNotification: InactiveNotification;
 }
 
-const inactiveNotification = new InactiveNotification();
+// const inactiveNotification = new InactiveNotification();
 
 export const defaultStore: IStore = {
   pomodoro: 30,
@@ -42,8 +41,7 @@ export const defaultStore: IStore = {
   sound: 'rocket',
   volume: 100,
   isRunning: false,
-  inactiveNotification: inactiveNotification,
-  notificationPermission: false
+  // inactiveNotification: inactiveNotification
 }
 
 export function settingsReducer(draft: IStore, action: ACTIONTYPE) {

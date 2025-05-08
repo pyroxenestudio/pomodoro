@@ -1,23 +1,16 @@
 import {consoleError} from './error-controller';
 
 export default class NotificationsController {
-  canBeUsed: boolean = false;
-  hasPermissions: boolean = false;
+  static canBeUsed: boolean = "Notification" in window;
+  static hasPermissions: boolean = Notification.permission === 'granted';
+  static canShowNotification: boolean = !!JSON.parse(localStorage.getItem('show-notification') ?? 'false');
   notification?: Notification;
-  canShowNotification: boolean = false;
-  constructor() {
-    this.canBeUsed = "Notification" in window;
-    this.hasPermissions = Notification.permission === 'granted';
-    const showNotification = localStorage.getItem('show-notification');
-    if (showNotification) {
-      this.canShowNotification = JSON.parse(showNotification);
-    }
-  }
+  constructor() {}
 
   async requestPermission() {
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
-      this.hasPermissions = true;
+      NotificationsController.hasPermissions = true;
       return Promise.resolve(true);
     } else {
       return Promise.reject(false);
@@ -25,12 +18,24 @@ export default class NotificationsController {
   }
 
   setCanShowNotification(checked: boolean) {
-    this.canShowNotification = checked;
+    NotificationsController.canShowNotification = checked;
     localStorage.setItem('show-notification', JSON.stringify(checked));
   }
 
+  canShowNotification() {
+    const showNotification = localStorage.getItem('show-notification');
+    if (showNotification) {
+      return NotificationsController.canBeUsed && NotificationsController.hasPermissions && NotificationsController.canShowNotification
+    }
+    return false;
+  }
+
+  hasPermission() {
+    return NotificationsController.canBeUsed && NotificationsController.hasPermissions
+  }
+
   create(message: string, options?: NotificationOptions) {
-    if (!this.hasPermissions && !this.canShowNotification) return consoleError("You don't have permission", false)
+    if (!this.canShowNotification()) return consoleError("You don't have permission", false)
     if (!message) return consoleError(`Message is: ${message}`, false);
 
     this.notification = new Notification(message, options);

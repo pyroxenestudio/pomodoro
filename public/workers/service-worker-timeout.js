@@ -1,7 +1,4 @@
-declare const self: ServiceWorkerGlobalScope;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const CACHE_VERSION = 'v1';
-let interval: NodeJS.Timeout | null = null;
+let interval = null;
 
 self.addEventListener('install', () => {
   console.log('Service Worker instalándose...')

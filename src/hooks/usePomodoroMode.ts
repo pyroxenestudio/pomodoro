@@ -81,7 +81,7 @@ export default function () {
   }, [settings.sound]);
 
   useEffect(() => {
-    // Add one day to the date,s o expiration time is today + 1 day
+    // Add one day to the date, so expiration time is today + 1 day
     const date = new Date();
     date.setDate(date.getDate() + 1);
     date.setHours(0,0,0);

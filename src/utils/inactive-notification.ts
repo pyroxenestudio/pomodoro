@@ -19,7 +19,7 @@ export default class InactiveNotification {
 
   async init() {
     if (this.isInit) return Promise.resolve();
-    const tempWorkerService = new ServiceWorkerController('./../workers/service-worker-timeout.ts');
+    const tempWorkerService = new ServiceWorkerController('/pomodoro/workers/service-worker-timeout.js');
     return tempWorkerService.init().then(() => {
       this.service = tempWorkerService;
       this.isInit = true;
@@ -43,11 +43,11 @@ export default class InactiveNotification {
   }
 
   hasPermissions() {
-    return this.notificationController.hasPermissions;
+    return this.notificationController.canShowNotification;
   }
 
   createNotification(type: string, payload?: Ipayload) {
-    if (this.notificationController.canBeUsed && this.notificationController.hasPermissions && this.notificationController.canShowNotification && this.isInit) {
+    if (this.isInit && this.notificationController.canShowNotification()) {
       this.service?.sendMessage({type, payload});
     } else {
       consoleError("You don't have permission to use notifications", false);

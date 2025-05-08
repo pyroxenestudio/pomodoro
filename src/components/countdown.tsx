@@ -1,18 +1,20 @@
 import { createPortal } from "react-dom";
 import { useContext, useEffect, useRef} from "react";
 import useCountDown from "../hooks/useCountDown";
-import { DispatchContext, SettingsContext } from "../store/context";
+import { DispatchContext } from "../store/context";
 import { PlayIcon, PauseIcon, StopIcon } from "@heroicons/react/24/solid";
 import usePomodoroMode from "../hooks/usePomodoroMode";
+import InactiveNotification from "../utils/inactive-notification";
 // import Alert from "./alert";
 
+const inactiveNotification = new InactiveNotification();
 const CountDown = function() {
   // CONTEXT
   const dispatch = useContext(DispatchContext)!;
-  const settings = useContext(SettingsContext)!;
+  // const settings = useContext(SettingsContext)!;
   // HOOKS
   const pomodoroMode = usePomodoroMode();
-  const timer = useCountDown(pomodoroMode.time, settings.inactiveNotification, pomodoroMode.nextMode);
+  const timer = useCountDown(pomodoroMode.time, inactiveNotification, pomodoroMode.nextMode);
   // REFS
   const titleEmpty = useRef<boolean>(false);
 

@@ -6,10 +6,6 @@ import { SettingsContext } from "../../store/context";
 import { useContext } from "react";
 import { ModeButtons } from "./mode-buttons";
 
-// interface Props {
-//   children: React.JSX.Element[];
-// }
-
 export function NavBar() {
   const settings = useContext(SettingsContext)!;
   return (

@@ -22,7 +22,7 @@ export default class ServiceWorkerController {
           this.service = reg;
           return Promise.resolve();
         }).catch(() => {
-          Promise.reject(consoleError('Service can not be loaded', false));
+          return Promise.reject(consoleError('Service can not be loaded', false));
         });
     } else {
       return Promise.reject(consoleError('Service worker can not be used', false));
