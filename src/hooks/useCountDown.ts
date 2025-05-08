@@ -16,8 +16,6 @@ export default function useCountDown(maxMinutes: number, inactiveNotification: I
   const [time, setTime] = useState<{minutes: number, seconds: number, percentage: number}>();
   // Hidden
   const [isHidden, setIsHidden] = useState<boolean>(false);
-  // Alert when tab is from resume information
-  const [freezeTime, setFreezeTime] = useState<string | null>(null);
 
   // REF
   // time in milliseconds when the clock started
@@ -26,8 +24,30 @@ export default function useCountDown(maxMinutes: number, inactiveNotification: I
   const timeout = useRef<ReturnType<typeof setTimeout>>(undefined);
   // Time passed before the clock is paused
   const lastElapsedTime = useRef<number>(null);
-  // Worker to set the timeout
-  // const worker = useRef<Worker>(null);
+
+  // Check if the pomodoro is already finished when the app start or if is not finished, it restore it.
+  useEffect(() => {
+    if ('wasDiscarded' in document) {
+      inactiveNotification.stopNotification();
+      const date = localStorage.getItem('freezeDate');
+      let lastElapsedTime: string | number | null = localStorage.getItem('lastElapsedTime');
+      // Check if the time after freeze is longer than pomodoro minutes
+      if (date && lastElapsedTime) {
+        const dateBeforeFreeze = dayjs(Number(date));
+        // If it wasn't longer, then restore the time to continue
+        lastElapsedTime = dayjs().diff(dateBeforeFreeze) + Number(lastElapsedTime);
+        if (lastElapsedTime < (maxMinutes * 60000)) {
+          // const lastElapsedTime = localStorage.getItem('lastElapsedTime');
+          if (lastElapsedTime) {
+            startTime.current = performance.now() - lastElapsedTime;
+            start();
+          }
+        }
+      }
+      localStorage.removeItem('freezeDate');
+      localStorage.removeItem('lastElapsedTime');
+    }
+  }, []);
 
   const updateClock = function() {
     if (startTime.current) {
@@ -62,48 +82,48 @@ export default function useCountDown(maxMinutes: number, inactiveNotification: I
   const backgroundClock = useCallback(function() {
     if (isPause) return;
     if (document.hidden) {
-      // Esto es para el backgroundFreeze, pero lo estoy probando aqui
-      const timeNow = performance.now();
-      localStorage.setItem('frozenTime', timeNow.toString());
+      if (inactiveNotification.hasPermissions()) {
+        inactiveNotification.createInactiveNotification({
+          message: 'Time Up!!',
+          time: getRestTime(),
+          options: {
+            icon: new URL('../../public/icon.svg', import.meta.url).toString()
+          }
+        });
+      }
     } else {
-      inactiveNotification.stopNotification();
-      // stop(true);
+      if (inactiveNotification.hasPermissions()) {
+        inactiveNotification.stopNotification();
+      }
+      localStorage.removeItem('lastElapsedTime');
+      localStorage.removeItem('freezeDate');
     }
     setIsHidden(document.hidden);
   }, [isPause, isRunning]);
 
-  const backgroundFreeze = useCallback(function () {
-    localStorage.setItem('frozenTime', Date.now().toString());
-    inactiveNotification.createInactiveNotification({message: 'Se murio', time: 5000});
-  }, [isPause, isRunning]);
-
-  const backgroundResume = useCallback(function () {
-    inactiveNotification.stopNotification();
-    let localstorageTime: string | number | null = localStorage.getItem('frozenTime');
-    if (localstorageTime) {
-      localstorageTime = parseFloat(localstorageTime);
-      setFreezeTime(`The page was inactive for: ${dayjs(localstorageTime).fromNow()}`);
-    }
-    
-  }, [isPause, isRunning]);
+  const unloadDocument = useCallback((event: Event) => {
+    event.preventDefault();
+    // Included for legacy support, e.g. Chrome/Edge < 119
+    event.returnValue = true;
+  }, []);
 
   // Remove and add event listener visibilitychange for backgroundClock function
   useEffect(() => {
     if (!isPause && isRunning) {
       document.addEventListener('visibilitychange', backgroundClock);
-      document.addEventListener('freeze', backgroundFreeze);
-      document.addEventListener('resume', backgroundResume);
+      window.addEventListener('beforeunload', unloadDocument)
     }
     return () => {
       document.removeEventListener('visibilitychange', backgroundClock);
-      document.removeEventListener('freeze', backgroundFreeze);
-      document.removeEventListener('resume', backgroundResume);
+      window.removeEventListener('beforeunload', unloadDocument);
     };
   },[isPause, isRunning]);
 
   const start = function() {
     if (isRunning) return;
-    startTime.current = performance.now();
+    if (startTime.current === 0) {
+      startTime.current = performance.now();
+    }
     setIsRunning(true);
     updateClock();
   }
@@ -115,6 +135,7 @@ export default function useCountDown(maxMinutes: number, inactiveNotification: I
         lastElapsedTime.current = performance.now() - startTime.current;
       } else {
         if (lastElapsedTime.current) {
+          // To get the same elapsed time before it was paused (if it was 20 second, so we get the same 20 seconds now)
           startTime.current = performance.now() - lastElapsedTime.current;
         }
         updateClock();
@@ -132,6 +153,8 @@ export default function useCountDown(maxMinutes: number, inactiveNotification: I
     const isAnUserEvent: boolean = !!event;
     clearTimeout(timeout.current);
     startTime.current = 0;
+    localStorage.removeItem('lastElapsedTime');
+    localStorage.removeItem('freezeDate');
 
     if (!isAnUserEvent) {
       setTime({
@@ -157,9 +180,16 @@ export default function useCountDown(maxMinutes: number, inactiveNotification: I
 
     setIsRunning(false);
     setIsPause(false);
+    setIsHidden(false);
     if (callback) {
       callback(isAnUserEvent);
     }
+  }
+
+  // Save the state if is hidden, because it can get freeze
+  if (isRunning) {
+    localStorage.setItem('lastElapsedTime', (performance.now() - startTime.current).toString());
+    localStorage.setItem('freezeDate', dayjs().valueOf().toString());
   }
 
   return {
@@ -170,9 +200,5 @@ export default function useCountDown(maxMinutes: number, inactiveNotification: I
     isRunning,
     isPause,
     isHidden,
-    freezeTime: {
-      message: freezeTime,
-      callback: () => setFreezeTime(null)
-    }
   };
 }

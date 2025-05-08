@@ -22,11 +22,10 @@ export default class ServiceWorkerController {
           this.service = reg;
           return Promise.resolve();
         }).catch(() => {
-          // throw Error(`Service Worker ${nameFile} can not be loaded`);
-          Promise.reject(consoleError('Service can not be loaded'));
+          Promise.reject(consoleError('Service can not be loaded', false));
         });
     } else {
-      return Promise.reject(consoleError('Service worker can not be used'));
+      return Promise.reject(consoleError('Service worker can not be used', false));
     }
   }
 
@@ -34,7 +33,6 @@ export default class ServiceWorkerController {
     if (this.service) {
       return this.service.unregister();
     } else {
-      console.log('It is the target');
       const target = await this.findService();
       if (target) {
         return target.unregister();

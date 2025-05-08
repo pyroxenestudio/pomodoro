@@ -1,8 +1,6 @@
-export const consoleError = function<T, S>(message: T, returnValue?: S): S | boolean {
-  console.error(message);
-  if (returnValue === undefined) {
-    return false;
-  }
+const DEV = import.meta.env.DEV
+export const consoleError = function<T, S>(message: T, returnValue: S): S {
+  if (DEV) console.error(message);
   return returnValue;
 }
 

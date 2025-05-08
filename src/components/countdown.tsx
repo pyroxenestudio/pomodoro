@@ -4,7 +4,7 @@ import useCountDown from "../hooks/useCountDown";
 import { DispatchContext, SettingsContext } from "../store/context";
 import { PlayIcon, PauseIcon, StopIcon } from "@heroicons/react/24/solid";
 import usePomodoroMode from "../hooks/usePomodoroMode";
-import Alert from "./alert";
+// import Alert from "./alert";
 
 const CountDown = function() {
   // CONTEXT
@@ -64,7 +64,7 @@ const CountDown = function() {
   return (
     <>
       {<span className='fixed top-0 bg-slate-600 dark:bg-slate-300 h-2' style={{width: `${timer.time?.percentage}%`}}/>}
-      {timer.freezeTime.message ? <Alert title='Resume tab from inactive' accept={timer.freezeTime.callback}>{timer.freezeTime.message}</Alert> : null}
+      {/* {timer.freezeTime.message ? <Alert title='Resume tab from inactive' accept={timer.freezeTime.callback}>{timer.freezeTime.message}</Alert> : null} */}
       {timer.isHidden && createPortal(<>{min}:{sec}</>, document.querySelector('title') as HTMLElement, 'title')}
       {!timer.isHidden && clockDownUI}
     </>

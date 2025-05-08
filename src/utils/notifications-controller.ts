@@ -4,9 +4,14 @@ export default class NotificationsController {
   canBeUsed: boolean = false;
   hasPermissions: boolean = false;
   notification?: Notification;
+  canShowNotification: boolean = false;
   constructor() {
     this.canBeUsed = "Notification" in window;
     this.hasPermissions = Notification.permission === 'granted';
+    const showNotification = localStorage.getItem('show-notification');
+    if (showNotification) {
+      this.canShowNotification = JSON.parse(showNotification);
+    }
   }
 
   async requestPermission() {
@@ -19,10 +24,14 @@ export default class NotificationsController {
     }
   }
 
+  setCanShowNotification(checked: boolean) {
+    localStorage.setItem('show-notification', JSON.stringify(checked));
+  }
+
   create(message: string, options?: NotificationOptions) {
-    if (!this.hasPermissions) return consoleError("You don't have permission")
-    if (!message) return consoleError(`Message is: ${message}`);
-    
+    if (!this.hasPermissions && !this.canShowNotification) return consoleError("You don't have permission", false)
+    if (!message) return consoleError(`Message is: ${message}`, false);
+
     this.notification = new Notification(message, options);
   }
 

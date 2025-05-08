@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { DispatchContext, SettingsContext } from "../store/context";
 import { ISettings, IStore, soundType } from "../store/reducer";
 import LabelInput from "./groups/label-input";
@@ -6,10 +6,13 @@ import Button from "./elements/button";
 import LabelSelect from "./groups/label-select";
 import Sounds from '../sounds';
 import { styleTheme } from "../theme";
+import NotificationsController from "../utils/notifications-controller";
 
 interface IProps {
   closeCallBackModal?: () => void; 
 }
+
+const notifications = new NotificationsController();
 
 const AppSettings = function ({closeCallBackModal}: IProps) {
   // PROPS
@@ -19,6 +22,8 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
   const dispatch = useContext(DispatchContext)!;
 
   // STATES
+  // It is a state because depends on the user, if either accept the permission for notifications
+  const [notificationPermission, setNotificationPermission] = useState(() => notifications.hasPermissions && notifications.canShowNotification);
 
   // REF
   const selectSoundsRef = useRef<HTMLSelectElement>(null);
@@ -27,7 +32,7 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
   const isSaved = useRef<boolean>(false);
 
   // EFFECTS
-  // Save the settings in the localstore
+  // Save the settings in the localstorage
   useEffect(() => {
     
     const newSettings: ISettings = {
@@ -37,6 +42,7 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
       interval: settings?.interval, // How many breaks between Long breaks. Ej: 1 would mean only one break. 
       sound: settings?.sound,
       volume: settings?.volume,
+      notificationPermission: settings?.notificationPermission
     }
 
     if (isSaved.current) {
@@ -52,13 +58,19 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
   // METHODS
   function save(formData: FormData) {
     // Get data from the form
-    const newSettingsData: Omit<IStore, 'isRunning'> = {
+    // TODO I am repeating this object two times, join then to use only one
+    const newSettingsData: Omit<IStore, 'isRunning' | 'inactiveNotification'> = {
       pomodoro: parseInt(formData.get('pomodoro') as string),
       break: parseInt(formData.get('break') as string),
       longBreak: parseInt(formData.get('longbreak') as string),
       interval: parseInt(formData.get('interval') as string),
       sound: formData.get('sounds') as soundType,
       volume: parseInt(formData.get('volume') as string),
+      notificationPermission: (() => {
+        const permission = !!formData.get('permission');
+        notifications.setCanShowNotification(permission);
+        return permission;
+      })()
     }
 
     // Stop Audio
@@ -66,7 +78,6 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
       currentAudio.current.pause();
       currentAudio.current = null;
     }
-
     dispatch({
       type: 'saveConfig',
       payload: newSettingsData as ISettings
@@ -87,6 +98,18 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
     }
   }
 
+  const requestNotificationPermission = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (notifications.hasPermissions) {
+      setNotificationPermission(e.target.checked );
+    } else {
+      notifications.requestPermission().then(() => {
+        setNotificationPermission(true);
+      }).catch(() => {
+        setNotificationPermission(false);
+      });
+    }
+  }
+
   // RENDER
   return (
     <>
@@ -101,6 +124,7 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
         <LabelInput name='volume' title={'Volume'} type='range' defaultValue={settings?.volume} max='100' min='0' ref={volumeRef}/>
         <LabelSelect title='Sounds' options={Object.keys(Sounds)} name='sounds' defaultValue={settings?.sound} ref={selectSoundsRef}/>
         <Button variant='info' onClick={testSound} className='flex flex-col text-left mb-1'>Test Sound</Button>
+        <LabelInput title='Notification Permission' name='permission' type='checkbox' checked={notificationPermission} onChange={requestNotificationPermission}/>
         <Button type='submit' className='w-30 mt-3' variant="success">Save</Button>
       </form>
     </>

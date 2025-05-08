@@ -5,7 +5,7 @@ import WorkerController from "./worker-controller";
 
 interface Ipayload {
   message: string;
-  time: number;
+  time?: number;
   options?: NotificationOptions;
 }
 
@@ -18,7 +18,6 @@ export default class InactiveNotification {
   }
 
   async init() {
-    console.log('Este es el INIT');
     if (this.isInit) return Promise.resolve();
     const tempWorkerService = new ServiceWorkerController('./../workers/service-worker-timeout.ts');
     return tempWorkerService.init().then(() => {
@@ -51,7 +50,7 @@ export default class InactiveNotification {
     if (this.notificationController.canBeUsed && this.notificationController.hasPermissions && this.isInit) {
       this.service?.sendMessage({type, payload});
     } else {
-      consoleError("You don't have permission to use notifications");
+      consoleError("You don't have permission to use notifications", false);
     }
   }
 

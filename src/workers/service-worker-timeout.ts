@@ -19,11 +19,13 @@ self.addEventListener('push', () => {
 self.addEventListener('message', (event) => {
   const {type, payload} = event.data;
   if (type === 'notification') {
-    console.log('mensaje enviado', payload);
     interval = setTimeout(() => {
-      console.log('Ha pasado el timeout');
       self.registration.showNotification(payload.message,payload.options);
     }, payload.time);
+  }
+
+  if (type === 'patata') {
+    self.registration.showNotification(payload.mensaje, payload.options);
   }
 
   if (type === 'remove') {

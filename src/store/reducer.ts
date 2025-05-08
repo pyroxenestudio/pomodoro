@@ -22,6 +22,7 @@ export interface ISettings {
   interval: number; // How many breaks between Long breaks. Ej: 1 would mean only one break. 
   sound: soundType
   volume: number;
+  notificationPermission: boolean;
 }
 
 export interface IStore extends ISettings {
@@ -41,7 +42,8 @@ export const defaultStore: IStore = {
   sound: 'rocket',
   volume: 100,
   isRunning: false,
-  inactiveNotification: inactiveNotification
+  inactiveNotification: inactiveNotification,
+  notificationPermission: false
 }
 
 export function settingsReducer(draft: IStore, action: ACTIONTYPE) {
