@@ -101,21 +101,15 @@ export default function useCountDown(maxMinutes: number, inactiveNotification: I
     setIsHidden(document.hidden);
   }, [isPause, isRunning]);
 
-  const unloadDocument = useCallback((event: Event) => {
-    event.preventDefault();
-    // Included for legacy support, e.g. Chrome/Edge < 119
-    event.returnValue = true;
-  }, []);
-
   // Remove and add event listener visibilitychange for backgroundClock function
   useEffect(() => {
     if (!isPause && isRunning) {
       document.addEventListener('visibilitychange', backgroundClock);
-      window.addEventListener('beforeunload', unloadDocument)
+      // window.addEventListener('beforeunload', unloadDocument)
     }
     return () => {
       document.removeEventListener('visibilitychange', backgroundClock);
-      window.removeEventListener('beforeunload', unloadDocument);
+      // window.removeEventListener('beforeunload', unloadDocument);
     };
   },[isPause, isRunning]);
 

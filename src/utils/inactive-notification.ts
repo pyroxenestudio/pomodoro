@@ -25,16 +25,16 @@ export default class InactiveNotification {
       this.isInit = true;
       return Promise.resolve();
     }).catch(() => {
-      const tempWorker = new WorkerController('./../workers/worker.ts');
-      if (tempWorker.init()) {
-        this.service = tempWorker;
-        if (this.service) {
-          this.isInit = true;
-          return Promise.resolve();
-        } else {
-          return Promise.reject();
-        }
-      }
+      // const tempWorker = new WorkerController('./../workers/worker.ts');
+      // if (tempWorker.init()) {
+      //   this.service = tempWorker;
+      //   if (this.service) {
+      //     this.isInit = true;
+      //     return Promise.resolve();
+      //   } else {
+      //     return Promise.reject();
+      //   }
+      // }
     });
   }
 
@@ -47,7 +47,7 @@ export default class InactiveNotification {
   }
 
   createNotification(type: string, payload?: Ipayload) {
-    if (this.notificationController.canBeUsed && this.notificationController.hasPermissions && this.isInit) {
+    if (this.notificationController.canBeUsed && this.notificationController.hasPermissions && this.notificationController.canShowNotification && this.isInit) {
       this.service?.sendMessage({type, payload});
     } else {
       consoleError("You don't have permission to use notifications", false);

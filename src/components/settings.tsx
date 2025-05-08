@@ -6,13 +6,10 @@ import Button from "./elements/button";
 import LabelSelect from "./groups/label-select";
 import Sounds from '../sounds';
 import { styleTheme } from "../theme";
-import NotificationsController from "../utils/notifications-controller";
 
 interface IProps {
   closeCallBackModal?: () => void; 
 }
-
-const notifications = new NotificationsController();
 
 const AppSettings = function ({closeCallBackModal}: IProps) {
   // PROPS
@@ -20,7 +17,7 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
   // CONTEXT
   const settings = useContext(SettingsContext)!;
   const dispatch = useContext(DispatchContext)!;
-
+  const notifications = settings.inactiveNotification.notificationController;
   // STATES
   // It is a state because depends on the user, if either accept the permission for notifications
   const [notificationPermission, setNotificationPermission] = useState(() => notifications.hasPermissions && notifications.canShowNotification);
@@ -124,7 +121,7 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
         <LabelInput name='volume' title={'Volume'} type='range' defaultValue={settings?.volume} max='100' min='0' ref={volumeRef}/>
         <LabelSelect title='Sounds' options={Object.keys(Sounds)} name='sounds' defaultValue={settings?.sound} ref={selectSoundsRef}/>
         <Button variant='info' onClick={testSound} className='flex flex-col text-left mb-1'>Test Sound</Button>
-        <LabelInput title='Notification Permission' name='permission' type='checkbox' checked={notificationPermission} onChange={requestNotificationPermission}/>
+        <LabelInput row title='Notification Permission' name='permission' type='checkbox' checked={notificationPermission} onChange={requestNotificationPermission}/>
         <Button type='submit' className='w-30 mt-3' variant="success">Save</Button>
       </form>
     </>

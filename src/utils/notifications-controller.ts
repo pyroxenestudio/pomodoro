@@ -25,6 +25,7 @@ export default class NotificationsController {
   }
 
   setCanShowNotification(checked: boolean) {
+    this.canShowNotification = checked;
     localStorage.setItem('show-notification', JSON.stringify(checked));
   }
 
