@@ -21,6 +21,12 @@ export function Footer() {
       </Modal>
       <Modal title='Changelog' icon={<span>Changelog</span>} buttonStyles='p-2'>
         <section>
+          <h2 className='text-2xl'>Version: 1.1</h2>
+          <ul className='mb-2'>
+            <li>Save state so if the countdown is running and the tab get inactive or close, you can resume it</li>
+            <li>Show a notification when the tab become inactive and your time is up in any mode (Pomodoro, break, long break)</li>
+            <li>Show then countdown in the title tab when the tab is not focused</li>
+          </ul>
           <h2 className='text-2xl'>Version: 1.0</h2>
           <ul>
             <li>Initial Release</li>

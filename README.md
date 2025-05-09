@@ -10,9 +10,9 @@ It just a Pomodoro, you select the time for every mode (Pomodoro, Break and Long
   - Rocket
 
 - How many breaks before long break
-- It doesn't render the clock while the tab is in the background, so the energy impact is good.
+- Save state if the tab become inactive or closed, so if you open it again and the countdown is not finished, it will continue
 - You can select Dark or Light theme
-- The information is saved in the localStorage
+- The information of the settings and the current state of the pomodoro is saved in the localStorage
 - Desktop - mobile (portrait / landscape)
 
 ## The sound are from:
