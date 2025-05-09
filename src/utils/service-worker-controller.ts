@@ -6,17 +6,16 @@ interface IMessage {
 }
 
 export default class ServiceWorkerController {
+  static canBeUsed: boolean = 'serviceWorker' in navigator;
   path: URL;
-  canBeUsed: boolean;
   service: ServiceWorkerRegistration | null = null;
   constructor(path: string) {
     this.path = new URL(path, import.meta.url);
-    this.canBeUsed = 'serviceWorker' in navigator;
   }
 
   async init() {
     // Register the file
-    if (this.canBeUsed) {
+    if (ServiceWorkerController.canBeUsed) {
       return navigator.serviceWorker.register(this.path)
         .then((reg) => {
           this.service = reg;

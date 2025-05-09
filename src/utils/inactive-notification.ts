@@ -12,19 +12,18 @@ interface Ipayload {
 export default class InactiveNotification {
   notificationController: NotificationsController = new NotificationsController();
   service: ServiceWorkerController | WorkerController | null = null;
-  isInit: boolean = false;
+  // isInit: boolean = false;
   constructor() {
-    if (this.hasPermissions()) this.init();
+    this.init();
   }
 
   async init() {
-    if (this.isInit) return Promise.resolve();
     const tempWorkerService = new ServiceWorkerController('/pomodoro/workers/service-worker-timeout.js');
     return tempWorkerService.init().then(() => {
       this.service = tempWorkerService;
-      this.isInit = true;
       return Promise.resolve();
     }).catch(() => {
+      return Promise.reject();
       // const tempWorker = new WorkerController('./../workers/worker.ts');
       // if (tempWorker.init()) {
       //   this.service = tempWorker;
@@ -39,15 +38,31 @@ export default class InactiveNotification {
   }
 
   requestPermission() {
-    return this.notificationController.requestPermission();
+    return this.notificationController.requestPermission().then(() => {
+      return this.init();
+    }).catch(() => {
+      return Promise.reject();
+    });
   }
 
-  hasPermissions() {
-    return this.notificationController.canShowNotification;
+  canShowNotification() {
+    return this.notificationController.canShowNotification();
+  }
+
+  canBeUse() {
+    return ServiceWorkerController.canBeUsed && NotificationsController.canBeUsed;
+  }
+
+  hasPermission() {
+    return NotificationsController.hasPermissions;
+  }
+
+  setCanShowNotification(checked: boolean) {
+    return this.notificationController.setCanShowNotification(checked);
   }
 
   createNotification(type: string, payload?: Ipayload) {
-    if (this.isInit && this.notificationController.canShowNotification()) {
+    if (this.notificationController.canShowNotification()) {
       this.service?.sendMessage({type, payload});
     } else {
       consoleError("You don't have permission to use notifications", false);

@@ -6,13 +6,13 @@ import Button from "./elements/button";
 import LabelSelect from "./groups/label-select";
 import Sounds from '../sounds';
 import { styleTheme } from "../theme";
-import NotificationsController from "../utils/notifications-controller";
+import InactiveNotification from "../utils/inactive-notification";
 
 interface IProps {
   closeCallBackModal?: () => void; 
 }
 
-const notifications = new NotificationsController();
+const inactiveNotification = new InactiveNotification();
 
 const AppSettings = function ({closeCallBackModal}: IProps) {
   // PROPS
@@ -22,7 +22,7 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
   const dispatch = useContext(DispatchContext)!;
   // STATES
   // It is a state because depends on the user, if either accept the permission for notifications
-  const [notificationPermission, setNotificationPermission] = useState(() => notifications.canShowNotification());
+  const [notificationPermission, setNotificationPermission] = useState(() => inactiveNotification.canShowNotification());
 
   // REF
   const selectSoundsRef = useRef<HTMLSelectElement>(null);
@@ -67,7 +67,7 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
       volume: parseInt(formData.get('volume') as string),
     }
 
-    notifications.setCanShowNotification(!!formData.get('permission'));
+    inactiveNotification.setCanShowNotification(!!formData.get('permission'));
 
     // Stop Audio
     if (currentAudio.current) {
@@ -95,10 +95,10 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
   }
 
   const requestNotificationPermission = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (NotificationsController.hasPermissions) {
+    if (inactiveNotification.hasPermission()) {
       setNotificationPermission(e.target.checked );
     } else {
-      notifications.requestPermission().then(() => {
+      inactiveNotification.requestPermission().then(() => {
         setNotificationPermission(true);
       }).catch(() => {
         setNotificationPermission(false);
@@ -109,9 +109,9 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
   // RENDER
   return (
     <>
-      <aside className={`info mb-2 ${styleTheme.padding.normal}`}>
-      You can move between browsers' tabs, but If the tab get inactive, the clock will stop.
-      </aside>
+      {!inactiveNotification.canBeUse() && <aside className={`warning-no-interactive mb-2 ${styleTheme.padding.normal}`}>
+        Your browser can not show notifications
+      </aside>}
       <form action={save}>
         <LabelInput name='pomodoro' title={'Pomodoro'} type='number' defaultValue={settings?.pomodoro}/>
         <LabelInput name='break' title={'Break'} type='number' defaultValue={settings?.break}/>
@@ -120,7 +120,7 @@ const AppSettings = function ({closeCallBackModal}: IProps) {
         <LabelInput name='volume' title={'Volume'} type='range' defaultValue={settings?.volume} max='100' min='0' ref={volumeRef}/>
         <LabelSelect title='Sounds' options={Object.keys(Sounds)} name='sounds' defaultValue={settings?.sound} ref={selectSoundsRef}/>
         <Button variant='info' onClick={testSound} className='flex flex-col text-left mb-1'>Test Sound</Button>
-        <LabelInput row title='Notification Permission' name='permission' type='checkbox' checked={notificationPermission} onChange={requestNotificationPermission}/>
+        <LabelInput row title='Notification Permission' name='permission' type='checkbox' checked={notificationPermission} onChange={requestNotificationPermission} disabled={!inactiveNotification.canBeUse()}/>
         <Button type='submit' className='w-30 mt-3' variant="success">Save</Button>
       </form>
     </>

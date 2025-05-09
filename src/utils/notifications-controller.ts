@@ -23,16 +23,12 @@ export default class NotificationsController {
   }
 
   canShowNotification() {
-    const showNotification = localStorage.getItem('show-notification');
-    if (showNotification) {
-      return NotificationsController.canBeUsed && NotificationsController.hasPermissions && NotificationsController.canShowNotification
-    }
-    return false;
+    return NotificationsController.canBeUsed && NotificationsController.hasPermissions && NotificationsController.canShowNotification;
   }
 
-  hasPermission() {
-    return NotificationsController.canBeUsed && NotificationsController.hasPermissions
-  }
+  // hasPermission() {
+  //   return NotificationsController.canBeUsed && NotificationsController.hasPermissions
+  // }
 
   create(message: string, options?: NotificationOptions) {
     if (!this.canShowNotification()) return consoleError("You don't have permission", false)

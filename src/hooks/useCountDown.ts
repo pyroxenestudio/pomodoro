@@ -82,7 +82,7 @@ export default function useCountDown(maxMinutes: number, inactiveNotification: I
   const backgroundClock = useCallback(function() {
     if (isPause) return;
     if (document.hidden) {
-      if (inactiveNotification.hasPermissions()) {
+      if (inactiveNotification.canShowNotification()) {
         inactiveNotification.createInactiveNotification({
           message: 'Time Up!!',
           time: getRestTime(),
@@ -92,7 +92,7 @@ export default function useCountDown(maxMinutes: number, inactiveNotification: I
         });
       }
     } else {
-      if (inactiveNotification.hasPermissions()) {
+      if (inactiveNotification.canShowNotification()) {
         inactiveNotification.stopNotification();
       }
       localStorage.removeItem('lastElapsedTime');

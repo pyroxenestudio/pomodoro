@@ -1,17 +1,17 @@
 let interval = null;
 
-self.addEventListener('install', () => {
-  console.log('Service Worker instalándose...')
-  // puedes precachear recursos aquí
-})
+// self.addEventListener('install', () => {
+//   console.log('Service Worker instalándose...')
+//   // puedes precachear recursos aquí
+// })
 
-self.addEventListener('activate', () => {
-  console.log('Service Worker activado')
-});
+// self.addEventListener('activate', () => {
+//   console.log('Service Worker activado')
+// });
 
-self.addEventListener('push', () => {
-  console.log('ESTE ES EL PUSH, PATATA EL RETORNO');
-})
+// self.addEventListener('push', () => {
+//   console.log('ESTE ES EL PUSH, PATATA EL RETORNO');
+// })
 
 self.addEventListener('message', (event) => {
   const {type, payload} = event.data;
